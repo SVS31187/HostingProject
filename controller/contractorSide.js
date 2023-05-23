@@ -193,6 +193,35 @@ const deleteFoodById = async (req, res) => {
     res.status(500).json({ msg: "Server Error" });
   }
 };
+const updateContractors = async function (req, res) {
+  const newupdate = {
+    contractorName: req.body.contractorName,
+    contractorDescription: req.body.contractorDescription,
+    contractorPassword: req.body.password,
+    contractorUPI: req.body.contractorUPI,
+  };
+
+  const oldContractor = await Contractor.findOne({ _id: req.contractorId });
+
+  const org = await Organisation.findOne({ _id: oldContractor.orgId });
+
+  await Contractor.findByIdAndUpdate(req.contractorId, {
+    contractorName: newupdate.contractorName,
+    contractorPhoneNumber: newupdate.contractorPhoneNumber,
+    contractorPassword: newupdate.contractorPassword,
+    contractorUPI: newupdate.contractorUPI,
+    contractorDescription: newupdate.contractorDescription,
+  });
+  const responseData = {
+    contractorName: newupdate.contractorName,
+    contractorPhoneNumber: newupdate.contractorPhoneNumber,
+    orgId: oldContractor.orgId,
+    orgIp: org.orgIp,
+    contractorUPI: newupdate.contractorUPI,
+    token: jwt.sign({ userId: oldContractor._id }, process.env.JWT_SECRET),
+  };
+  res.json(responseData);
+};
 
 module.exports = {
   signUpContractor,
@@ -202,4 +231,5 @@ module.exports = {
   deleteFoodById,
   searchFood,
   addFoodByContractorId,
+  updateContractors,
 };

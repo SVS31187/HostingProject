@@ -10,6 +10,7 @@ const {
   signUpContractor,
   loginContractors,
   addFoodByContractorId,
+  updateContractors,
 } = require("../controller/contractorSide");
 
 // JWT AUTHENTICATOR FOR CONTRACTOR
@@ -20,6 +21,8 @@ router.post("/signUp", signUpContractor);
 
 //CONTRACTOR LOGIN
 router.post("/login", loginContractors);
+//Update Contractor
+router.post("/updateDetails", authenticateTokenContractor, updateContractors);
 
 //Add food
 router.post("/addFood", authenticateTokenContractor, addFoodByContractorId);
